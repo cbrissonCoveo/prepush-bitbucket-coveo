@@ -36,15 +36,19 @@ class Client(object):
         return list(x["slug"] for x in raw_repos_data)
 
     def enum_files(self, repo_slug, params=None):
+        '''Returns a dict of filename: href to fetch the content of the script'''
         raw_data = self._get(f"2.0/repositories/{self.username}/{repo_slug}/src")
+
+        # I'm hurt
         file_list = list(x["path"] for x in raw_data["values"])
         raw_href_list = list(x["links"]["self"]["href"] for x in raw_data["values"])
+        
         return dict(zip(file_list, raw_href_list))
 
     def get_code_body(self, repo_slug, params=None):
-        """Returns a body of the source code to be shown in QuickView"""
-        file_list = self.enum_files(repo_slug, params=params)
-        return self._get(f"2.0/repositories/{self.username}/{repo_slug}/src")
+        # ==================================================================
+        # WE'RE HERE NOW
+        # ==================================================================
 
     def _get(self, endpoint, params=None):
         response = requests.get(
