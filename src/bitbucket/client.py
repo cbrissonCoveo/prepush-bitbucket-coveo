@@ -10,7 +10,20 @@ from bitbucket.exceptions import (
 )
 
 
-class Client(object):
+class BitBucket:
+    def __init__(self, user, password, owner=None):
+        worker = Worker(user, password, owner=None)
+        self.repo_slugs = worker.get_repos_slugs()
+        self.repo_files = [
+            self.gen_file_list(repo_slug) for repo_slug in self.repo_slugs
+        ]
+
+    def gen_file_list(self, repo_slug, params=None):
+        # GENERATE FILE TREE FOR THE REPO
+        pass
+
+
+class Worker(object):
     BASE_URL = "https://api.bitbucket.org/"
 
     def __init__(self, user, password, owner=None):
@@ -36,19 +49,20 @@ class Client(object):
         return list(x["slug"] for x in raw_repos_data)
 
     def enum_files(self, repo_slug, params=None):
-        '''Returns a dict of filename: href to fetch the content of the script'''
+        """Returns a dict of filename: href to fetch the content of the script"""
         raw_data = self._get(f"2.0/repositories/{self.username}/{repo_slug}/src")
 
         # I'm hurt
         file_list = list(x["path"] for x in raw_data["values"])
         raw_href_list = list(x["links"]["self"]["href"] for x in raw_data["values"])
-        
+
         return dict(zip(file_list, raw_href_list))
 
     def get_code_body(self, repo_slug, params=None):
         # ==================================================================
         # WE'RE HERE NOW
         # ==================================================================
+        pass
 
     def _get(self, endpoint, params=None):
         response = requests.get(
