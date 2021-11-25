@@ -32,6 +32,7 @@ class Worker(object):
             "values"
         ]
         return {x["slug"] for x in raw_repos_data}
+        # ['repo1', 'repo2']
 
     def enum_files(self, repo_slug, params=None):
         """Returns a dict of filename: href to fetch the content of the script"""
@@ -42,6 +43,7 @@ class Worker(object):
         raw_href_list = list(x["links"]["self"]["href"] for x in raw_data["values"])
 
         return dict(zip(file_list, raw_href_list))
+        ["file1", "file2"]
 
     def get_code_body(self, repo_slug, params=None):
         # ==================================================================
