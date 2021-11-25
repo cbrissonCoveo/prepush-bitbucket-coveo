@@ -31,7 +31,7 @@ class Worker(object):
         raw_repos_data = self._get(f"2.0/repositories/{self.username}", params=params)[
             "values"
         ]
-        return list(x["slug"] for x in raw_repos_data)
+        return {x["slug"] for x in raw_repos_data}
 
     def enum_files(self, repo_slug, params=None):
         """Returns a dict of filename: href to fetch the content of the script"""
